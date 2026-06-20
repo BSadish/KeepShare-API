@@ -1,50 +1,38 @@
 import {ApiError} from "../util/ApiError"
 import {asyncHandler} from "../util/asyncHandler"
-import {User} from "../models/user.model"
+import {ApiResponse} from "../util/ApiResponse"
+import { join } from "node:path"
 
 
-const generateAccessAndRefreshToken=async(userId)=>{
-    try {
-        const user= await User.findById(userId)
-        const accessToken=user.generateAccessToken()
-        const refreshToken=user.refreshToken()
+// const generateAccessAndRefreshToken=
 
-user.refreshToken=refreshToken
-user.save({validateBeforeSave:false})
-
-
-    } catch (error) {
-        throw new ApiError(500,"Something Went wrong while extracting refresh and access Token")
-    }
-}
 
 
 const registerUser=asyncHandler(async(req,res)=>{
 
 })
 
-const loginUser= asyncHandler(async(req,res)=>{
+const loginUser=asyncHandler(async(req,res)=>{
 
-const{email,username,password}=req.body
+const {username, email, password}=req.body
 
-if(!username || !email){
-    throw new ApiError(400,"Username or password is required");
+if (!username || !email){
+    throw new ApiError(401,"Username or Email required");
 }
+
 const user= await User.findOne({
-    $or :[{username},{email}]
+    $or:[{username},{email}]
 })
 
-if(!user){
-    throw new ApiError(401,"User Doesnot Exist")
+if (!user){
+    throw new ApiError(401,"User Doesnot Exit")
 }
 
-const isPasswordValid=await user.isPasswowrdCorrect(password)
+const isVallidPassowrd= await user.isPasswordCorrect(password)
+
+
 
 })
-if(!isPasswordValid){
-    throw new ApiError(401,"Enter correct Password")
-}
-
 
 
 export {
