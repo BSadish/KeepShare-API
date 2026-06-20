@@ -2,9 +2,23 @@ import {ApiError} from "../util/ApiError"
 import {asyncHandler} from "../util/asyncHandler"
 import {ApiResponse} from "../util/ApiResponse"
 import { join } from "node:path"
+import { User } from "../models/user.model"
 
 
-// const generateAccessAndRefreshToken=
+const generateAccessAndRefreshToken=async(userId)=>{
+    try {
+        const user= await User.findById(userId)
+        const accessToken=user.generateAcceessToken()
+        const refreshToken=user.generateRefreshToken()
+
+        user.refreshToken=refreshToken
+        await user.save({validateBeforeSave:false})
+
+        return {accesToken, refreshToken}
+    } catch (error) {
+        throw new ApiError(500, "Something went wrong while generating access and refresh token")
+    }
+}
 
 
 
@@ -16,7 +30,7 @@ const loginUser=asyncHandler(async(req,res)=>{
 
 const {username, email, password}=req.body
 
-if (!username || !email){
+if (!username && !email){
     throw new ApiError(401,"Username or Email required");
 }
 
@@ -29,9 +43,38 @@ if (!user){
 }
 
 const isVallidPassowrd= await user.isPasswordCorrect(password)
+if (!isValidPassword) {
+        throw new ApiError(401, "Invalid user credentials")
+    }
+const {accessToken, refreshToken}= await generateAccessAndRefreshToken(user._id)
+
+
+const loggedInUser= await User.findById(user._id)
+.select("-password -refreshToken");
+
+const options={
+    httpOnly:true,
+    secure:true
+}
+
+
+return res.status(200)
+.cookie("accessToken",accessToken, options)
+.cookie("refreshToken",refreshToken,options)
+.json(
+    new ApiResponse(200, 
+        {
+        user:loggedInUser, accessToken, refreshToken}),
+    "User Logged in Successfully"
+)
 
 
 
+})
+
+const logOutUser=asyncHandler(async(req,res)=>{
+
+    
 })
 
 
