@@ -74,24 +74,24 @@ return res.status(200)
 
 const logOutUser=asyncHandler(async(req,res)=>{
 await User.findByIdAndUpdate(
-    req.user._id,
+    req.user._id,  //mongoose search for user name with this id name and $set which is an mongoose update operator change the field inside the req.user._id object so before refreshtoken=kdsflasdjf555 now after $set refreshtoken:undefined
     {
         $set:{
             refreshToken:undefined
         }
     },
         {
-            new:true
+            new:true //return updated docuement llike refershtoken will be updated to undefined with new:true, if new is not used database will return new value but user gets the old valude as refreshtoken=ksdjflsdkw3
         }
     
 )
 const options={
-    httpOnly=true,
+    httpOnly:true,
     secure:true
 }
 return res.status(200)
 .clearCookie("accessToken",options)
-.clearCookie9("refreshToken",options)
+.clearCookie("refreshToken",options)
 .json(new ApiResponse (200, {}, "User Logged Out Successfully"))
 })
 
