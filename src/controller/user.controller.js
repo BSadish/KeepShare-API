@@ -26,13 +26,26 @@ const registerUser=asyncHandler(async(req,res)=>{
 
 const {username, email, password, collections, bookmarks} = req.body
 
+if([username, email, password].some((field)=>field?.trim()==="")){
+    throw new ApiError(400, "All field are required");
+}
+
+const existedUser= await User.findOne({
+    $or:[{username}, {email}]
+});
+
+if(!existedUser){
+    throw new ApiError(409, "User having same field is alread existes")
+}
 const user=await User.create({
     username, 
     email,
     password,
-    collections,
-    bookmarks
 })
+const createdUser= await User.findById(user._id).select("-password -refreshToken")
+
+return res.status(201)
+    .json(new ApiResponse(201, createdUser,"User registered successfully"))
 
 })
 
