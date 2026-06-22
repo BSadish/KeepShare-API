@@ -4,24 +4,25 @@ const userSchema=new mongoose.Schema(
     ({
         username:{
             type:String,
-            required:true
+            required:true,
+            unique:true,
+            trim:true,
+            lowercase:true
         },
         email:{
             type:String,
-            required:true
+            required:true,
+            unique:true,
+            lowercase:true,
+            trim:true
         },
         password:{
             type:String,
             required:[true,"Password is requred"]
         },
-        collections:[{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Collection"
-        }],
-        bookmarks:[{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Bookmark"
-        }]
+       refreshToken:{
+        type:String
+       }
     }
 
 
