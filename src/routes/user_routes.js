@@ -9,3 +9,4 @@ router.route("/login").post(loginUser)
 
 
 router.route("/logout").post(verifyJWT,logoutUser)
+router.route("/bookmarks")
