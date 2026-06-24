@@ -36,6 +36,7 @@ export const trackAndRedirect=asyncHandler(async(req,res)=>{
             $inc:{clicks:1}
         },
         {new:true}
+        
     );
     if(!bookmark)
     {
