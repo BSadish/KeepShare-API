@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-Parser";
+import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/error.middleware";
 
 const app=express();
@@ -16,14 +16,20 @@ app.use(express.urlencoded({extended:true, limit:"16kb"}));
 app.use(cookieParser());
 
 import userRouter from "./routes/user.routes";
-import bookmarkRouter from "./routes/bookmark.routes";
-import collectionRouter from "./routes/bookmark.routes"
-
 
 app.use("/api/v1/users",userRouter);
-app.use("/api/v1/bookmarks",bookmarkRouter);
-app.use("/api/v1/collections",collectionRouter);
+
 
 app.use(errorHandler);
 
 export {app};
+
+
+import bookmarkRouter from "./routes/bookmark.routes";
+import collectionRouter from "./routes/bookmark.routes"
+
+
+
+app.use("/api/v1/bookmarks",bookmarkRouter);
+app.use("/api/v1/collections",collectionRouter);
+
