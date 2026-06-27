@@ -1,0 +1,43 @@
+so Schema is simply a blueprint for mongodb to store data like
+{name, email, password} so this is a simple pluprint so if user treis to insert DOB then it doesnto accept and mongodb is not design in a way to insert it 
+
+Model is the overall communicator of Mongodb that communicate to mongodb and perform differnt task llike it know hot to createuser, finduser, update user 
+
+Document is simpley a one single document it like the stoing what is stored in the Usermodel like as stores the complete db data like name, email, passwores and alos the methods, save(), genrateacesstoken passwordcorect
+
+const user = new User({
+    username: "Sadish",
+    password: "123456"
+});
+
+await user.save();
+
+so in this code user acts as the document we describe aboove that stores all the data, mehtods and model after the data is shifted to user then with user.save it is stored in the database 
+
+if if (!this.isModified("password")) return next(); line is removed then evertime the new password is created when we chage something in the database as before saving it will run like if we chagne username then password will also change
+
+
+
+pre("save") the password hasing is placed inside because in contoller we may have differnt controller to run and save data so if we forget in one time in one controller hten it is a security gap so pre is the best soluatoin wehn we save data before going to db it hsh the password.
+running it in registeUser we need seprate code for it and when we want for bookmar.controller we need another seprate code for it 
+
+
+import mongoose form "mongoose'
+
+const userSchema=new mongoose.Schema(({
+username:{
+    type:String,
+    unique:true,
+    required:true
+}
+
+}),{timestamps:true})
+
+userSchema.methods.getusername= function(){
+    return this.username
+}
+export const User=mongoose.model("User",userSchema)
+
+const user= await User.findone({email:sadish12@gmail.com})
+
+console.log(user.getusername)
