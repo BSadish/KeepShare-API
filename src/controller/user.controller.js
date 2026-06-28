@@ -110,7 +110,8 @@ await User.findByIdAndUpdate(
 )
 const options={
     httpOnly:true,
-    secure:true
+    secure:true,
+    sameSite:"strict"
 }
 return res.status(200)
 .clearCookie("accessToken",options)
@@ -160,7 +161,7 @@ return res.
 const changeCurrentPassword=asyncHandler(async(req,res)=>{
 const {oldPassword, newPassword}=req.body
 
-const user=User.findById(req.user?._id);
+const user= await User.findById(req.user?._id);
 
 const isPasscordCorrect= await user.isPasswordCorrect(oldPassword)
 if(!isPasswordCorrect){
