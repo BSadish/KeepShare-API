@@ -41,6 +41,5 @@ export const getCollectionDetails=asyncHandler(async(req,res)=>{
     if (!collection) {
         throw new ApiError(404, "Collection not found");
     }
-
     return res.status(200).json(new ApiResponse(200, collection, "Collection fetched successfully"));
 });
